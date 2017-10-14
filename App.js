@@ -1,130 +1,78 @@
 import React, { Component } from 'react';
-import { ASyncStorage, StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, ASyncStorage, Button, StyleSheet, Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import home from './pages/Home';
 
 export default class App extends Component {
 
-  /**
-   * This is for any functions relating to any info
-   * for your pet. Naming is the only thing I can think of,
-   * but there may be more.
-   */
-  
-    /**
-     * Initiates creature data (stats, starting level, etc) for a new creature
-     * @param {string} name				The user-provided creature name
-     * @param {string} creatureType		The creator-provided creature type chosen by user
-     */
-    initiateCreature(name, creatureType) {
-      setLevel(name, 0);
-      gainExp(name, 0);
-    }
-  
-    /**
-     * Handles leveling creatures up.
-     * @param {string} name 			The user-provided creature name
-     * @param {number} currentLevel 	The current level of the creature, usually provided by AsyncStorage
-     */
-    setLevel(name, currentLevel) {
-      try{
-        await AsyncStorage.setItem(name + '-current-level', currentLevel++);
-      } catch (error) {
-  
-      }
-    }
-
-/**
- * This is for any functions relating to storing,
- * retrieving, and awarding experience.
- */
-  /**
-   * General handler for experience gain for completimg tasks, minigames, quests, etc
-   * @param {string}	name 	The user-provided creature name
-   * @param {number} 	expGain The amount of experience awarded for a specific action
-   */
-  gainExp(name,expGain) {
-    try{
-      const currentExperience = await AsyncStorage.getItem(name + '-current-experience');
-      if (currentExperience) {
-        await AsyncStorage.setItem(name + '-current-experience', currentLevel++);
-      }
-      else {
-        await AsyncStorage.setItem(name + '-current-experience', 0);
-      }
-    } catch (error) {
-
-    }
-    checkLevelRequirements(name);
-    return currentExperience;
+  constructor(props) {
+    super(props);
+    this.state = {name: '', level:1, exp: 0, tasks:[], screen:'home'};
   }
 
-  /**
-   * Checks experience to see if they're at a level-up point.
-   * @param {string} name The user-provided creature name	
-   */
-  checkLevelRequirements(name) {
-    try{
-      const currentLevel = await AsyncStorage.getItem(name + '-current-level');
-      const currentExperience = await AsyncStorage.getItem(name + '-current-experience');
+  checkLevelRequirements() {
+    const { name, exp, level } = this.state;
 
-      if (currentLevel === 1) {
-        if (currentExperience > 5) {
-          setLevel(name, currentLevel);
-        }
+    if (level === 1) {
+      if (exp > 5) {
+        this.gainLevel();
       }
-      else if (currentLevel === 2) {
-        if (currentExperience > 25) {
-          setLevel(name, currentLevel);
-        }
+    }
+    else if (level === 2) {
+      if (exp > 25) {
+        this.gainLevel();
       }
-      else if (currentLevel === 3) {
-        if (currentExperience > 75) {
-          setLevel(name, currentLevel);
-        }
+    }
+    else if (level === 3) {
+      if (exp > 75) {
+        this.gainLevel();
       }
-      else if (currentLevel === 4) {
-        if (currentExperience > 175) {
-          setLevel(name, currentLevel);
-        }
+    }
+    else if (level === 4) {
+      if (exp > 175) {
+        this.gainLevel();
       }
-      else if (currentLevel === 5) {
-        if (currentExperience > 300) {
-          setLevel(name, currentLevel);
-        }
+    }
+    else if (level === 5) {
+      if (exp > 300) {
+        this.gainLevel();
       }
-
-    } catch(error) {
-
     }
   }
-      /**
-       * This general header is a representation of your stats, your current pet's name,
-       * and other things that are pertinent to the user.
-       */
 
-      renderGeneralHeader() {
-        dispatch(CreatureActions.initiateCreature(Toby,Octoby)).then(() => {
-        const hello = setLevel(Toby,0)});
+  gainLevel() {
+    this.state.level++;
+  }
 
-        return (
-          <Text>{ hello }</Text>
-        );
-      };
+  gainExp(expGain) {
+    this.state.exp = this.state.exp + expGain;
+    this.checkLevelRequirements();
+  }
 
+  initiateCreature(creatureName) {
+    this.state.name = creatureName;
+  };
 
-      render() {
-        return (
-          <View style={styles.container}>
-            { renderGeneralHeader() }
-          </View>
-        );
-      };
+  addTask(taskToAdd, daysSelected, timeSelected, weekLength) {
+    let { tasks } = this.state;
+
+    tasks.push({
+      'name':taskToAdd,
+      'days':daysSelected,
+      'time':timeSelected,
+      'weekDuration':weekLength
+  });
+
+  // rell.days = pell
+  }
+
+    render() {
+      return (
+        <Navigator initialRoute={{home, index:0}} renderScene = {(route, navigator) =>
+      <home />}/>
+      )
     }
 
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    });
+}
+
+
