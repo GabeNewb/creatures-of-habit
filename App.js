@@ -63,24 +63,23 @@ export default class App extends Component {
     });
   }  
 
-    render() {
-      return (
-        <View style={styles.container}>
-          <MainScreenNavigator />
-        </View>
-      )
-    }
-}
+  render() {
+    return (
+      <View style={styles.container}>
+        <MainScreenNavigator />
+      </View>
+  )}
+  }
 
 class HomeScreen extends Component {
   render() {
-    return <Text>Creature</Text>
+    return <Button title={'press for tasks screen'} onPress={console.log(3)} />
   }
 }
 
 class TasksScreen extends Component {
   render() {
-    return <Text style={styleMedia.textColor}>of Habits</Text>
+    return <Text style={styles.textColor}>of Habits</Text>
   }
 }
 
