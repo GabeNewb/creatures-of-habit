@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { AppRegistry, ASyncStorage, Button, StyleSheet, Text, View } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import home from './pages/Home';
+import { TabNavigator } from 'react-navigation';
 
 export default class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {name: '', level:1, exp: 0, tasks:[], screen:'home'};
+    this.state = {name: '', level:1, exp: 0, tasks:[]};
   }
 
   checkLevelRequirements() {
@@ -61,18 +60,43 @@ export default class App extends Component {
       'days':daysSelected,
       'time':timeSelected,
       'weekDuration':weekLength
-  });
-
-  // rell.days = pell
-  }
+    });
+  }  
 
     render() {
       return (
-        <Navigator initialRoute={{home, index:0}} renderScene = {(route, navigator) =>
-      <home />}/>
+        <View style={styles.container}>
+          <MainScreenNavigator />
+        </View>
       )
     }
-
 }
 
+class HomeScreen extends Component {
+  render() {
+    return <Text>Creature</Text>
+  }
+}
 
+class TasksScreen extends Component {
+  render() {
+    return <Text style={styleMedia.textColor}>of Habits</Text>
+  }
+}
+
+const MainScreenNavigator = TabNavigator({
+  Home: { screen: HomeScreen },
+  Tasks: { screen: TasksScreen },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textColor: {
+    color: 'black',
+    fontSize: 10,
+  }
+})
